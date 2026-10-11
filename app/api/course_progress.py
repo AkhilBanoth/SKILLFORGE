@@ -1,4 +1,7 @@
-from fastapi import APIRouter, Depends
+
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Path
 from sqlalchemy.orm import Session
 
 from app.database.postgres import get_db
@@ -18,7 +21,10 @@ from app.services.course_progress_service import (
 router = APIRouter(prefix="/courses", tags=["Course Progress"])
 
 
-@router.get("/progress", response_model=list[CourseProgressResponse])
+@router.get(
+    "/progress",
+    response_model=list[CourseProgressResponse],
+)
 def get_my_progress(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -29,9 +35,12 @@ def get_my_progress(
     )
 
 
-@router.post("/{course_id}/progress", response_model=CourseProgressResponse)
+@router.post(
+    "/{course_id}/progress",
+    response_model=CourseProgressResponse,
+)
 def calculate_progress(
-    course_id: int,
+    course_id: Annotated[int, Path(ge=1)],
     payload: CourseProgressCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -43,9 +52,12 @@ def calculate_progress(
     )
 
 
-@router.put("/{course_id}/progress", response_model=CourseProgressResponse)
+@router.put(
+    "/{course_id}/progress",
+    response_model=CourseProgressResponse,
+)
 def update_progress(
-    course_id: int,
+    course_id: Annotated[int, Path(ge=1)],
     payload: CourseProgressUpdate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),

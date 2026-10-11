@@ -39,6 +39,9 @@ from app.api.ai_learning_recommendations import (
 from app.api.ai_mentor import router as ai_mentor_router
 from app.api.admin import router as admin_router
 from app.api.ai import router as ai_router
+from app.api import project_agent
+from app.api.roadmap import router as roadmap_router
+from app.api.resume import router as resume_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -87,6 +90,9 @@ app.include_router(ai_learning_recommendations_router)
 app.include_router(ai_mentor_router)
 app.include_router(admin_router)
 app.include_router(ai_router)
+app.include_router(project_agent.router)
+app.include_router(roadmap_router)
+app.include_router(resume_router)
 
 @app.get("/", tags=["Health"])
 def root():
